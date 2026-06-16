@@ -1,0 +1,50 @@
+ion-toolbar {
+  --background: #1a73e8;
+  --color: #ffffff;
+}
+
+ion-toolbar ion-button {
+  --color: #ffffff;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-inline-end: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-item {
+  --background: rgba(var(--ion-color-primary-rgb, 26, 115, 232), 0.15);
+  --border-style: none;
+  --inner-border-width: 0;
+  border-bottom: 2px solid rgba(var(--ion-color-primary-rgb, 26, 115, 232), 0.3);
+}
+
+.document-item:nth-of-type(even) {
+  --background: rgba(var(--ion-color-primary-rgb, 26, 115, 232), 0.05);
+}
+
+ion-list {
+  padding-bottom: 45px;
+}
+
+.ion-select-custom {
+  --popover-width: auto !important;
+  --popover-max-width: 80vw !important;
+  min-width: 200px;
+}
+
+.ion-select-item-custom {
+  min-width: 200px;
+}
+
+.montant-input {
+  width: 8rem;
+}
+
+.paypal {
+  padding-left: 5px;
+  padding-top: 3px;
+}

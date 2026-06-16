@@ -1,0 +1,49 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure environment
+        run: |
+          mkdir -p src/environments
+          touch src/environments/environment.ts
+          sed \
+          -e "s|SUPABASE_URL|${{ secrets.SUPABASE_URL }}|g" \
+          -e "s|SUPABASE_KEY|${{ secrets.SUPABASE_KEY }}|g" \
+          -e "s|SUPABASE_REDIRECT_URL|${{ secrets.SUPABASE_REDIRECT_URL }}|g" \
+          -e "s|PAYPAL_CLIENT_ID|${{ secrets.PAYPAL_CLIENT_ID }}|g" \
+          -e "s|PAYPAL_ENVIRONMENT|${{ secrets.PAYPAL_ENVIRONMENT }}|g" \
+          src/environments/environment.template.ts \
+          > src/environments/environment.prod.ts
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build -- --base-href "/premierjour/" --configuration production
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: www
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
