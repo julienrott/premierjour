@@ -273,18 +273,19 @@
 
     <!-- Interface principale (Recherche et Liste) -->
     <div *ngIf="!showAddPage && !showEditPage && !paymentStatus" class="ion-padding">
-      
+
       <!-- Filtres et Recherche -->
       <ion-card class="filters-card">
         <ion-card-content>
           <ion-grid>
             <ion-row class="ion-align-items-center">
               <ion-col size="12" size-md="6">
+                <ion-label>Effectuer une recherche</ion-label>
                 <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="onSearchChange($event)" placeholder="Rechercher un document..." class="custom-searchbar"></ion-searchbar>
               </ion-col>
               <ion-col size="12" size-md="3">
                 <ion-item fill="outline" class="filter-item">
-                  <ion-label position="stacked">Thème</ion-label>
+                  <ion-label position="stacked">Sélectionner un thème</ion-label>
                   <ion-select [(ngModel)]="selectedTheme" (ionChange)="onThemeChange()" interface="popover">
                     <ion-select-option value="">Tous</ion-select-option>
                     <ion-select-option *ngFor="let theme of themes" [value]="theme">{{ theme }}</ion-select-option>
@@ -293,7 +294,7 @@
               </ion-col>
               <ion-col size="12" size-md="3">
                 <ion-item fill="outline" class="filter-item" [disabled]="!selectedTheme || isLoadingCategories">
-                  <ion-label position="stacked">Catégorie</ion-label>
+                  <ion-label position="stacked">Sélectionner une catégorie</ion-label>
                   <ion-select [(ngModel)]="selectedCategory" (ionChange)="onCategoryChange()" interface="popover">
                     <ion-select-option value="">Toutes</ion-select-option>
                     <ion-select-option *ngFor="let category of categories" [value]="category">{{ category }}</ion-select-option>
