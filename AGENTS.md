@@ -77,10 +77,13 @@ onApprove()
 ### Tables
 ```sql
 -- profiles
-id (uuid, pk) | role (text: 'admin'/'user')
+id (uuid, pk, fk:auth.users.id) | role (text: 'admin'/'user')
 
 -- documents
 id (serial, pk) | theme | categorie | nom | annee | numero | lien
+
+-- dons
+id (uuid, pk) | user_id (uuid, fk:auth.users.id) | amount (numeric) | currency (text, default:'EUR') | status (text, default:'pending') | payment_id (text) | payment_source (text) | payer_id (text) | order_id (text) | payer_email (text) | payer_name (text) | message (text) | created_at (timestamptz, default:now())
 ```
 
 ### Stored Procedures
