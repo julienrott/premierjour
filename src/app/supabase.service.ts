@@ -99,6 +99,10 @@ export class SupabaseService {
     );
   }
 
+  searchDocumentsByName(query: string) {
+    return this.supabase.rpc('search_documents_limited', { p_query: query });
+  }
+
   addDocument(document: { theme: string; categorie: string; nom: string; annee: number; numero: string; lien?: string }) {
     return this.supabase
       .from('documents')

@@ -3,6 +3,8 @@ import { SupabaseService } from './supabase.service';
 import { Session } from '@supabase/supabase-js';
 import { loadScript } from "@paypal/paypal-js";
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +20,9 @@ export class AppComponent implements OnInit {
   selectedTheme: string = '';
   selectedCategory: string = '';
 
+  searchQuery: string = '';
+  searchSubject = new Subject<string>();
+
   isLoading: boolean = false;
   session: Session | null = null;
   email: string = '';
@@ -27,6 +32,9 @@ export class AppComponent implements OnInit {
   donAmount: number | undefined = undefined;
   paypalRendered = false;
   isAdmin$ = this.supabaseService.isAdmin$;
+
+  paymentStatus: 'success' | 'error' | 'cancel' | null = null;
+  paymentErrorMessage: string = '';
 
   showAddPage: boolean = false;
   newDocTheme: string = '';
@@ -65,6 +73,39 @@ export class AppComponent implements OnInit {
         this.loadThemes();
       }
     });
+
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(async (query) => {
+      if (!query || query.trim() === '') {
+        this.selectedTheme = '';
+        this.selectedCategory = '';
+        this.categories = [];
+        this.documents = [];
+        return;
+      }
+
+      this.selectedTheme = '';
+      this.selectedCategory = '';
+      this.categories = [];
+
+      this.isLoading = true;
+      try {
+        const { data, error } = await this.supabaseService.searchDocumentsByName(query);
+        if (error) {
+          console.error('Error searching documents:', error);
+        } else {
+          this.documents = data || [];
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onSearchChange(event: any) {
+    this.searchSubject.next(this.searchQuery);
   }
 
   async login() {
@@ -179,16 +220,22 @@ export class AppComponent implements OnInit {
         if (error) {
           throw error;
         }
-        alert("Merci pour votre don");
-        window.location.reload();
+        this.paymentStatus = 'success';
       },
       onCancel: async (error) => {
-        alert("Le paiement a été annulé");
+        this.paymentStatus = 'cancel';
       },
       onError: async (error) => {
-        alert(error);
+        this.paymentStatus = 'error';
+        this.paymentErrorMessage = String(error);
       }
     }).render(element);
+  }
+
+  returnFromPayment() {
+    this.paymentStatus = null;
+    this.paymentErrorMessage = '';
+    this.donAmount = undefined;
   }
 
   navigateToAdd() {
@@ -210,8 +257,8 @@ export class AppComponent implements OnInit {
       theme: this.newDocTheme,
       categorie: this.newDocCategory,
       nom: this.newDocNom,
-      annee: this.newDocAnnee,
-      numero: this.newDocNumero,
+      annee: Number(this.newDocAnnee),
+      numero: String(this.newDocNumero),
       ...(this.newDocLien && { lien: this.newDocLien }),
     };
 
@@ -262,8 +309,8 @@ export class AppComponent implements OnInit {
       theme: this.editDocTheme,
       categorie: this.editDocCategory,
       nom: this.editDocNom,
-      annee: this.editDocAnnee,
-      numero: this.editDocNumero,
+      annee: Number(this.editDocAnnee),
+      numero: String(this.editDocNumero),
       ...(this.editDocLien ? { lien: this.editDocLien } : { lien: null }),
     };
 

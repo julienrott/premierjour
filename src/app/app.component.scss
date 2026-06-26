@@ -1,50 +1,168 @@
+/* Header Styling */
 ion-toolbar {
-  --background: #1a73e8;
-  --color: #ffffff;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
 }
-
 ion-toolbar ion-button {
-  --color: #ffffff;
+  --color: var(--ion-color-primary-contrast);
 }
 
-.user-email {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin-inline-end: 8px;
+.header-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.header-start-buttons, .header-end-buttons {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+.header-end-buttons {
+  justify-content: flex-end;
+}
+.header-container ion-title {
+  flex: 2;
+  padding: 0;
+}
+
+/* Centrage vertical de la page de login */
+.full-height-grid {
+  height: 100%;
+}
+.full-height-row {
+  height: 100%;
+}
+.auth-card {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  border-radius: 12px;
+}
+
+/* Conteneur principal pour desktop/tablette */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Formulaires et Filtres */
+ion-item[fill="outline"] {
+  --border-radius: 8px;
+  --background: var(--ion-color-surface, #ffffff);
+}
+@media (prefers-color-scheme: dark) {
+  ion-item[fill="outline"] {
+    --background: var(--ion-item-background, #1e293b);
+  }
+}
+
+/* Filtres et Donation - Suppression des marges pour alignement */
+.filters-card,
+.donation-card {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Grille des documents - Ajustement de l'alignement */
+.document-grid {
+  padding-left: 0;
+  padding-right: 0;
+}
+.document-grid ion-col {
+  padding-left: 0;
+  padding-right: 0;
+}
+/* Ajout d'un petit espacement entre les cartes sur la même ligne (pour tablette/desktop) */
+@media (min-width: 768px) {
+  .document-grid ion-col {
+    padding-right: 16px;
+  }
+}
+
+/* Recherche */
+.custom-searchbar {
+  --border-radius: 8px;
+  --box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Carte Document */
+.document-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  margin: 8px 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.document-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.card-header-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.edit-btn {
+  margin-left: auto;
+}
+.doc-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.doc-details-list ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  font-size: 0.95rem;
+}
+
+/* États vides */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--ion-color-medium);
+}
+.empty-state ion-icon {
+  font-size: 64px;
+  margin-bottom: 1rem;
+  color: var(--ion-color-light-shade, #d4d8db);
+}
+.empty-state h2 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--ion-text-color, #000);
+}
+
+/* Section PayPal */
+.donation-card {
+  border: 1px solid var(--ion-color-light-shade);
+  border-radius: 12px;
+  box-shadow: none;
+}
+.donation-input {
+  max-width: 250px;
+  margin: 0 auto;
+}
+.paypal-container {
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Payment Status Cards */
+.payment-status-container {
+  min-height: 60vh;
   display: flex;
   align-items: center;
 }
 
-.filter-item {
-  --background: rgba(var(--ion-color-primary-rgb, 26, 115, 232), 0.15);
-  --border-style: none;
-  --inner-border-width: 0;
-  border-bottom: 2px solid rgba(var(--ion-color-primary-rgb, 26, 115, 232), 0.3);
-}
-
-.document-item:nth-of-type(even) {
-  --background: rgba(var(--ion-color-primary-rgb, 26, 115, 232), 0.05);
-}
-
-ion-list {
-  padding-bottom: 45px;
-}
-
-.ion-select-custom {
-  --popover-width: auto !important;
-  --popover-max-width: 80vw !important;
-  min-width: 200px;
-}
-
-.ion-select-item-custom {
-  min-width: 200px;
-}
-
-.montant-input {
-  width: 8rem;
-}
-
-.paypal {
-  padding-left: 5px;
-  padding-top: 3px;
+.status-card {
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  padding: 1.5rem 1rem;
 }
